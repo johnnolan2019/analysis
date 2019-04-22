@@ -10,6 +10,10 @@ message LogData {
     string channel = 4;
 }
 
+message Channel{
+    string channel = 1;
+}
+
 message Id{
     int32 id = 1;
 }
@@ -29,4 +33,5 @@ service AccessDB{
     rpc getSystemLogs(Uid) returns(stream LogData);
     rpc getAll(Id) returns(stream LogData);
     rpc update(LogData) returns(Id);
+    rpc getChanel(Uid) returns(Channel);
 }
