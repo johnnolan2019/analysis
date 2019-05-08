@@ -1,9 +1,6 @@
 package com.cit.micro.analysis.client;
 
-import com.cit.micro.data.AccessDBGrpc;
-import com.cit.micro.data.Id;
-import com.cit.micro.data.LogData;
-import com.cit.micro.data.Uid;
+import com.cit.micro.data.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -16,11 +13,9 @@ import java.util.List;
 @Repository
 public class GrpcDataClient {
     private final GrpcLoggerClient logger = new GrpcLoggerClient();
-    private final List<com.cit.micro.analysis.LogData> logDataList = new ArrayList<>();
-    private final List<com.cit.micro.analysis.LogData> uidLogDataList = new ArrayList<>();
 
     public List<com.cit.micro.analysis.LogData> getAll() {
-
+        List<com.cit.micro.analysis.LogData> logDataList = new ArrayList<>();
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
                 .usePlaintext()
                 .build();
@@ -46,8 +41,8 @@ public class GrpcDataClient {
         return logDataList;
     }
 
-    public List<com.cit.micro.analysis.LogData> get(com.cit.micro.analysis.Uid uid) {
-
+    public List<com.cit.micro.analysis.LogData> getSystemLogs(com.cit.micro.analysis.Uid uid) {
+        List<com.cit.micro.analysis.LogData> uidLogDataList = new ArrayList<>();
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
                 .usePlaintext()
                 .build();
@@ -71,5 +66,19 @@ public class GrpcDataClient {
 
         channel.shutdown();
         return uidLogDataList;
+    }
+
+    public Result delete(Id id){
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
+                .usePlaintext()
+                .build();
+
+        AccessDBGrpc.AccessDBBlockingStub stub = AccessDBGrpc.newBlockingStub(channel);
+
+        Result dbResult = stub.delete(id);
+        //logger.info(dbResult.toString());
+
+        channel.shutdown();
+        return dbResult;
     }
 }
