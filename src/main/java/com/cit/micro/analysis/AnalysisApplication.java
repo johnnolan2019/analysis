@@ -11,21 +11,22 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class AnalysisApplication {
+    private static int port = 6567;
+    private final static GrpcLoggerClient logger = new GrpcLoggerClient();
 
     public static void main(String[] args) {
-        final GrpcLoggerClient logger = new GrpcLoggerClient();
         SpringApplication.run(AnalysisApplication.class, args);
         logger.info("Analysis Service now running");
         Server server = ServerBuilder
-                .forPort(6567)
+                .forPort(port)
                 .addService(new GrpcAnalysis()).build();
         try{
             server.start();
             server.awaitTermination();
         }catch (IOException e){
-            logger.info("bad");
+            logger.error("Analysis Service threw IO exception");
         }catch (InterruptedException e){
-            logger.error("Not as bad, but not good");
+            logger.error("Analysis Service threw Interrupted exception");
         }
     }
 

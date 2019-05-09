@@ -13,10 +13,12 @@ import java.util.List;
 @Repository
 public class GrpcDataClient {
     private final GrpcLoggerClient logger = new GrpcLoggerClient();
+    private String host = "localhost";
+    private int port = 6568;
 
     public List<com.cit.micro.analysis.LogData> getAll() {
         List<com.cit.micro.analysis.LogData> logDataList = new ArrayList<>();
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
         AccessDBGrpc.AccessDBBlockingStub stub = AccessDBGrpc.newBlockingStub(channel);
@@ -43,7 +45,7 @@ public class GrpcDataClient {
 
     public List<com.cit.micro.analysis.LogData> getSystemLogs(com.cit.micro.analysis.Uid uid) {
         List<com.cit.micro.analysis.LogData> uidLogDataList = new ArrayList<>();
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
         AccessDBGrpc.AccessDBBlockingStub stub = AccessDBGrpc.newBlockingStub(channel);
@@ -69,7 +71,7 @@ public class GrpcDataClient {
     }
 
     public Result delete(Id id){
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6568)
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
 
