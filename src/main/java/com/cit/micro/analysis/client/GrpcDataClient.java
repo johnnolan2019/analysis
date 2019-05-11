@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public class GrpcDataClient {
     private final GrpcLoggerClient logger = new GrpcLoggerClient();
-    private String host = "localhost";
+    private String host = "data-service";
     private int port = 6568;
 
     public List<com.cit.micro.analysis.LogData> getAll() {
